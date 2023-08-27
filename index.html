@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="calculatrice">
+        <div id="input">
+          4 + 5 = 9
+        </div>
+        <div id="boutons">
+             <button class="btn" onclick="ajouter('7')">7</button>
+             <button class="btn" onclick="ajouter('8')">8</button>
+             <button class="btn" onclick="ajouter('9')">9</button>
+             <button class="btn btn-noir" onclick="ajouterOperateur('+')">+</button>
+             <button class="btn" onclick="ajouter('4')">4</button>
+             <button class="btn" onclick="ajouter('5')">5</button>
+             <button class="btn" onclick="ajouter('6')">6</button>
+             <button class="btn btn-noir" onclick="ajouterOperateur('-')">-</button>
+             <button class="btn" onclick="ajouter('1')">1</button>
+             <button class="btn" onclick="ajouter('2')">2</button>
+             <button class="btn" onclick="ajouter('3')">3</button>
+             <button class="btn btn-noir" onclick="ajouterOperateur('x')">x</button>
+             <button class="btn btn-rouge" onclick="effacer()">C</button>
+             <button class="btn" onclick="ajouter('0')">0</button>
+             <button class="btn btn-noir" onclick="calcul()">=</button>
+             <button class="btn btn-noir" onclick="ajouterOperateur('/')">&divide;</button>
+        </div>
+    </div>
+
+    <script>
+      let input = document.getElementById("input");
+      let operateur,operande1,operande2,resultat;
+
+      let initialisation = ()=>{
+        operande1 ='';
+        operande2 = '';
+        operateur = '';
+        resultat = '';
+        input.innerText = '0';
+      }
+      // ajouter des chiffres dans la partie input
+      let ajouter = (valeur) =>{
+        if(!resultat){
+          if(operateur){
+            operande2 = operande2 == '0'? valeur: operande2 +valeur;
+            input.innerText = operande1 + operateur + operande2;
+          }else{
+            operande1 = operande1 == "0" ? valeur: operande1 +valeur;
+            input.innerText = operande1;
+          }
+          
+        }
+        
+      }
+
+
+      // effacer des chiffres dans la partie input
+     let effacer = () =>{
+      if(resultat){
+        initialisation();
+      }else if(operateur){
+        if(operande2==""){
+          operateur = " ";
+          input.innerText = operande1;
+        }else{
+          if(operande2.length > 1){
+            operande2 = operande2.substring(0,operande2.length-1);
+            input.innerText = operande1 + operateur + operande2;
+          }else{
+            operande2 = "";
+            input.innerText = operande1 + operateur
+          }
+        }
+      }else{
+        if(operande1.length > 1){
+            operande1 = operande1.substring(0,operande1.length-1);
+            input.innerText = operande1;
+          }else{
+            operande1 = "";
+            input.innerText ="0"; 
+          }
+      }
+     }
+
+    //  ajout d'un operateur
+    let ajouterOperateur = (opt)=>{
+      if(operande1 && !resultat && !operande2){
+        operateur = opt =="/" ? '\u00f7': opt;
+        input.innerText = operande1 + operateur;
+      }
+    }
+
+    // resultat de l'operation
+    let calcul = ()=>{
+      if(operande2){
+        if(operateur=='-'){
+          resultat = parseInt(operande1) - parseInt(operande2);
+        }else if(operateur=='+'){
+          resultat = parseInt(operande1) + parseInt(operande2);
+        }else if(operateur=='x'){
+          resultat = parseInt(operande1) * parseInt(operande2);
+        }else{
+          resultat = parseInt(operande1) / parseInt(operande2);
+          resultat = resultat.toString().length>3 ? resultat.toFixed(4) : resultat;
+        }
+        input.innerText = operande1 + operateur + operande2 +"="+resultat;
+      }
+    }
+      initialisation();
+    </script>
+</body>
+</html>
